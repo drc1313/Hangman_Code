@@ -14,12 +14,16 @@ public class Controller {
 	
 	public void addNewPlayer(String name, boolean human) {
 		if(human) {
-			playerList.add(new Player("me",50));
+			playerList.add(new Player(name,50));
 		}else {
-			playerList.add(new AI_Player("com",50));
+			playerList.add(new AI_Player(name,50));
 		}
 	}
-	
+	public void addPlayer(Player p) {
+		
+		playerList.add(p);
+		
+	}
 	public void startGame() {
 		if(playerList.size()>1) {
 			man = new Man();
@@ -27,15 +31,14 @@ public class Controller {
 			guessedLetters=new ArrayList<Character>();
 			while(!manStatus().equals("Right_Arm") && count!=gameWordSize) {
 				for(Abstract_Player p : playerList) {
-					
 						displayWord();
 						p.setLetters(guessedLetters);
+						System.out.println(p.getName()+" Enter Guess:");
 						validateGuess(p.getGuess());
 						if(manStatus().equals("Right_Arm") || count==gameWordSize) {
 							break;
 						}
 					}
-//				getGuess();
 			}
 			System.out.println("Game Is Over");
 		}else {
@@ -47,7 +50,7 @@ public class Controller {
 	
 	private void setWord() {
 		
-	    System.out.println("Enter Word");
+	    System.out.println(playerList.get(0).getName()+": Enter Word");
 	    String word = myObj.nextLine(); 
 	    if(word.length()>0 && word.length()<=10) {
 	    	gameWordSize = word.length();
@@ -57,12 +60,12 @@ public class Controller {
 	    	setWord();
 	    }
 	}
-	
-//	private void getGuess() {
-//		 
-//	}
+
 	
 	private void validateGuess(char g) {
+		if(g==0) {
+			return;
+		}
 		guessedLetters.add(g);
 		for(char c : gameWord) {
 			if(c==g) {

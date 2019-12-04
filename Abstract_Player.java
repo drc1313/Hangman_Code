@@ -1,11 +1,16 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Abstract_Player {
+public abstract class Abstract_Player implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	protected List<Character> guessedLetters = null;
 
-	String name=null;
-	int tokens;
+	private String name=null;
+	private int tokens;
+	
 	Abstract_Player(String n, int t){
 		name = n;
 		tokens = t;
