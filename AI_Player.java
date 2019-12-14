@@ -9,14 +9,14 @@ public class AI_Player extends Abstract_Player{
 	}
 
 	@Override
-	public char getGuess() {
+	public String getGuess() {
 		Random r = new Random();
 		while(true) {			
-			char guess = letters[r.nextInt(letters.length)];
-			if(!guessedLetters.contains(guess)) {
+			String guess = Character.toString(letters[r.nextInt(letters.length)]);
+			if(!guessedLetters.contains(guess.charAt(0))) {
 				long start = System.currentTimeMillis();
 				while(System.currentTimeMillis()-start<2000) {
-					
+					//Do Nothing
 				}
 				System.out.println(guess);
 				return guess;

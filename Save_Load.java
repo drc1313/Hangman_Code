@@ -43,8 +43,6 @@ public class Save_Load {
 			}
 			if(!exists) {
 				playerList.add(p);
-				System.out.println("foudnd");
-
 			}
 			
 			
