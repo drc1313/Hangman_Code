@@ -34,7 +34,7 @@ public class Controller {
 			Abstract_Player curPlayer = null;
 			setWord();
 			guessedLetters=new ArrayList<Character>();
-			while(!manStatus().equals("Right_Arm") && winner == false && playerSize-outPlayers != 0) {
+			while(!man.getStatus().equals("Right_Arm") && winner == false && playerSize-outPlayers != 0) {
 				for(int i=0;i<playerList.size();i++) {					
 					Abstract_Player p = playerList.get(i);
 					if(p.getInGame()==true) {
@@ -48,20 +48,21 @@ public class Controller {
 						if(validateGuess(p)) {
 							i-=1;
 						}
-						if(manStatus().equals("Right_Arm") || winner == true) {
+						if(man.getStatus().equals("Right_Arm") || winner == true) {
 							break;
 						}
 					}					
 				}
 			}
+			
 			String word = new String(gameWord);
 			if(winner == true) {
 				curPlayer.addTokens(25);
-				System.out.println(curPlayer.getName()+ " Wins and got 25 coins. '"+word+ "' was the correct word");	
+				System.out.println(curPlayer.getName()+ " Wins and got 25 tokens. You now have "+ curPlayer.getTokens()+" tokens.");	
 				savePlayers();
 			}else {
 				playerList.get(0).addTokens(100-(gameWordSize*10));
-				System.out.println("The man is hung. '"+word+"' was the correct word. "+playerList.get(0).getName()+" wins and got "+Integer.toString(100-(gameWordSize*10))+" Tokens. \n You now have "+playerList.get(0).getTokens()+" tokens." );
+				System.out.println("The man is hung. '"+word+"' was the correct word. "+playerList.get(0).getName()+" wins and got "+Integer.toString(100-(gameWordSize*10))+" tokens. \n You now have "+playerList.get(0).getTokens()+" tokens." );
 				savePlayers();
 			}
 		}else {
@@ -75,13 +76,13 @@ public class Controller {
 		String word = null;
 		Player p = (Player) playerList.get(0);
 		p.setInGame(false);
-		while(true) {
-			
+		while(true) {			
 		    System.out.println(p.getName()+": Enter Word");
 		    word = myObj.nextLine();
 		    if(word.contains(" ") || word.length()<=1 || word.length()>=11) {
 		    	System.out.println("Cannot have spaces and must have 1-10 letters");
 		    }else {
+		    	System.out.println("\n \n \n \n \n \n \n \n \n \n ");
 		    	break;
 		    }
 		}
@@ -117,16 +118,10 @@ public class Controller {
 		
 		man.addPart();
 		System.out.println("Incorrect. The "+man.getStatus()+" has been added.");
-		return false;
-		
+		return false;		
 	}
 	
-	public String manStatus() {
-		return man.getStatus();
-	}
-	
-	private void displayWord() {
-		
+	private void displayWord() {		
 		for(char c : gameWord) {
 			if(guessedLetters.contains(c)) {
 				System.out.print(c+" ");
@@ -139,8 +134,7 @@ public class Controller {
 	}
 	
 	private void checkWin() {
-		count=0;
-		
+		count=0;		
 		for(char c : gameWord) {
 			if(guessedLetters.contains(c)) {				
 				count++;
@@ -155,22 +149,21 @@ public class Controller {
 		return guessedLetters;
 	}
 	
-	public void delay(){
+	private void delay(){
 		long start = System.currentTimeMillis();
 		while(System.currentTimeMillis()-start<1500) {
 			//Do Nothing
 		}
 	}
 	
-	public boolean buyLetter(Abstract_Player p) {
+	private boolean buyLetter(Abstract_Player p) {
 		if(p.rmTokens(20)) {
-			sl.save((Player) p);
 			for(char c:gameWord) {
 				if(!guessedLetters.contains(c)) {
 					guessedLetters.add(c);
-					System.out.println(p.getName()+" has bought a letter and "+ c +" has been added.");
+					System.out.println(p.getName()+" has bought a letter and '"+ c +"' has been revealed.");
 					System.out.println(p.getName() + " now has "+p.getTokens()+" left.");
-					System.out.println(p.getName()+"You may take another turn.");
+					System.out.println(p.getName()+", you may take another turn.");
 					checkWin();
 					return true;
 				}
@@ -179,7 +172,7 @@ public class Controller {
 		return false;
 	}
 	
-	public void solveWord(Abstract_Player p, String g) {
+	private void solveWord(Abstract_Player p, String g) {
 		String word = new String(gameWord);
 		if(word.contentEquals(g)) {
 			winner = true;
@@ -192,8 +185,7 @@ public class Controller {
 		
 	}
 	
-	private void savePlayers() {
-		
+	private void savePlayers() {		
 		for(Abstract_Player p:playerList) {
 			if(p.getClass().toString().contains("class Player")) {
 				sl.save((Player)p);
